@@ -6,8 +6,9 @@ import com.cydeo.model.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-import static com.cydeo.service.DataGenerator.findUserById;
+import static com.cydeo.service.DataGenerator.*;
 
 
 public class Implementation {
@@ -20,7 +21,10 @@ public class Implementation {
      */
     public static List<User> readAllStudents() {
         //TODO
-        return null;
+        return fillUsers().stream()
+                .filter(user -> user.getRole().equals(findRoleById(1)))
+                .collect(Collectors.toList());
+
     }
 
 
@@ -32,7 +36,9 @@ public class Implementation {
 
     public static List<User> readAllAdmins() {
         //TODO
-        return null;
+        return fillUsers().stream()
+                .filter(user -> user.getRole().equals(findRoleById(3)))
+                .collect(Collectors.toList());
 
     }
 
@@ -43,7 +49,10 @@ public class Implementation {
      */
     public static List<User> readAllManagers() {
         //TODO
-        return null;
+        return  fillUsers().stream()
+                .filter(user -> user.getRole().equals(findRoleById(2)))
+                .collect(Collectors.toList());
+
 
     }
 
@@ -54,7 +63,9 @@ public class Implementation {
      */
     public static List<User> readAllSuspendedUsers() {
         //TODO
-        return null;
+        return fillUsers().stream()
+                .filter(user -> user.getState().equals(UserState.SUSPENDED))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -64,7 +75,9 @@ public class Implementation {
      */
     public static List<User> readAllConfirmedUsers() {
         //TODO
-        return null;
+        return fillUsers().stream()
+                .filter(user -> user.getState().equals(UserState.CONFIRMED))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -74,7 +87,9 @@ public class Implementation {
      */
     public static List<User> readAllPendingUsers() {
         //TODO
-        return null;
+        return fillUsers().stream()
+                .filter(user -> user.getState().equals(UserState.PENDING))
+                .collect(Collectors.toList());
     }
 
 
@@ -85,7 +100,9 @@ public class Implementation {
      */
     public static Long countCourses() {
         //TODO
-        return null;
+        return fillCoursesAssigned().stream()
+                .map(CourseAssigned::getCourse)
+                .count();
 
     }
 
@@ -97,7 +114,11 @@ public class Implementation {
      */
     public static Integer sumDurationForAllData() {
         //TODO
+//        return fillCourses().stream()
+//                .map(Course::getDuration)
+//
         return null;
+
     }
 
     /**
@@ -109,7 +130,14 @@ public class Implementation {
     public static List<Course> findCoursesByUserId(Integer id) {
         User specificUser = findUserById(id);
         //TODO
-        return null;
+        return fillCourses().stream()
+        .filter(course -> course.getId().equals(specificUser))
+                .collect(Collectors.toList());
+
+
+
+
+
     }
 
 
@@ -158,7 +186,10 @@ public class Implementation {
      */
     public static User findFirstWithFirstName() {
         //TODO
-        return null;
+        return fillUsers().stream()
+                .filter(user -> user.getFirstName().startsWith("J"))
+                .findFirst().orElseThrow();
+
     }
 
     /**
@@ -170,7 +201,9 @@ public class Implementation {
      */
     public static User findAnyWithLastName() {
         //TODO
-        return null;
+        return fillUsers().stream()
+                .filter(user -> user.getLastName().equals("Wooden"))
+                .findAny().orElseThrow();
     }
 
     /**
@@ -181,7 +214,9 @@ public class Implementation {
      */
     public static Map<Boolean, List<User>> partitionOfConfirmedUsers() {
         //TODO
-        return null;
+        return fillUsers().stream()
+                .collect(Collectors.groupingBy(user -> user.getState().equals(UserState.CONFIRMED)));
+
     }
 
     /**
