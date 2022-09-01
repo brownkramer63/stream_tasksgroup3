@@ -6,6 +6,7 @@ import com.cydeo.model.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.cydeo.service.DataGenerator.*;
@@ -39,6 +40,7 @@ public class Implementation {
         return fillUsers().stream()
                 .filter(user -> user.getRole().equals(findRoleById(3)))
                 .collect(Collectors.toList());
+
 
     }
 
@@ -100,8 +102,7 @@ public class Implementation {
      */
     public static Long countCourses() {
         //TODO
-        return fillCoursesAssigned().stream()
-                .map(CourseAssigned::getCourse)
+        return fillCourses().stream()
                 .count();
 
     }
@@ -114,10 +115,11 @@ public class Implementation {
      */
     public static Integer sumDurationForAllData() {
         //TODO
-//        return fillCourses().stream()
-//                .map(Course::getDuration)
-//
-        return null;
+        return fillCourses().stream()
+                .map(Course::getDuration)
+                .reduce(Integer::sum).orElseThrow();
+
+
 
     }
 
@@ -130,8 +132,9 @@ public class Implementation {
     public static List<Course> findCoursesByUserId(Integer id) {
         User specificUser = findUserById(id);
         //TODO
-        return fillCourses().stream()
-        .filter(course -> course.getId().equals(specificUser))
+        return fillCoursesAssigned().stream()
+                .filter(each -> each.getUser().equals(specificUser))
+                .map(each -> each.getCourse()).peek(System.out::println)
                 .collect(Collectors.toList());
 
 
@@ -140,6 +143,9 @@ public class Implementation {
 
     }
 
+    public static void main(String[] args) {
+        System.out.println(findCoursesByUserId(5));
+    }
 
     /**
      * This method converts the duration of course to the weeks based on user information.
